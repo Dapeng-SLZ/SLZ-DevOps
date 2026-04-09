@@ -181,6 +181,21 @@ powershell -ExecutionPolicy Bypass -File .\scripts\package-release.ps1
 - Linux 脚本输出 `slz-devops-<version>.tar.gz`
 - Windows PowerShell 脚本输出 `slz-devops-<version>.zip`
 
+## GitHub Actions 自动发布
+
+仓库已提供 GitHub Actions 工作流 [release.yml](.github/workflows/release.yml)。
+
+使用方式：
+
+- 推送与 [VERSION](VERSION) 一致的 tag，例如 `v0.1.0`
+- 或在 GitHub Actions 页面手动运行 `Release Packages`，并输入 tag
+
+工作流会自动：
+
+- 在 Ubuntu 上生成 `tar.gz` 发行包
+- 在 Windows 上生成 `zip` 发行包
+- 自动创建或更新 GitHub Release，并上传两个附件
+
 ## 已实现范围
 
 - 单机版基础观测与告警闭环

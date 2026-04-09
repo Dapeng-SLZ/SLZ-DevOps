@@ -6,8 +6,10 @@ __pycache__/
 *.pyd
 *.log
 .env
+releases/
 data/
 deploy/grafana/data/
 deploy/loki/data/
 deploy/prometheus/data/
 deploy/promtail/positions.yaml
+
