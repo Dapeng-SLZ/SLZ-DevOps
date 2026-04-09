@@ -7,7 +7,18 @@ if [[ "$(id -u)" -ne 0 ]]; then
 fi
 
 dnf makecache
-dnf install -y git curl wget tar podman podman-compose python3 python3-pip firewalld rsync
+dnf install -y git curl wget tar podman python3 python3-pip firewalld rsync
+
+if ! dnf install -y podman-compose; then
+  echo "dnf 未提供 podman-compose，改用 pip 安装。"
+  python3 -m pip install --upgrade pip
+  python3 -m pip install podman-compose
+fi
+
+if ! command -v podman-compose >/dev/null 2>&1 && ! podman compose version >/dev/null 2>&1; then
+  echo "未安装可用的 compose 运行时，请检查 podman / podman-compose 安装结果。" >&2
+  exit 1
+fi
 
 systemctl enable --now firewalld
 systemctl enable --now podman.socket || true

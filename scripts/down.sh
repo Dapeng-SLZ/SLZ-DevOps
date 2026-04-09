@@ -14,7 +14,7 @@ if [[ -f "${ENV_FILE}" ]]; then
 fi
 
 if ! runtime="$(detect_compose_runtime)"; then
-  echo "未检测到 docker compose 或 podman compose。" >&2
+  echo "未检测到 docker compose、docker-compose、podman compose 或 podman-compose。" >&2
   exit 1
 fi
 

@@ -36,7 +36,7 @@ for command_name in tar curl awk ss; do
 done
 
 if ! runtime="$(detect_compose_runtime)"; then
-  fail "未检测到 docker compose 或 podman compose。"
+  fail "未检测到 docker compose、docker-compose、podman compose 或 podman-compose。"
 fi
 
 info "检测到容器编排运行时: ${runtime}"
