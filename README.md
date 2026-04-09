@@ -60,6 +60,13 @@ chmod +x scripts/*.sh
 sudo ./scripts/install-openeuler.sh
 ```
 
+如果目标主机无法直接访问 Docker Hub，可先配置 Podman 镜像源：
+
+```bash
+sudo ./scripts/configure-container-mirrors.sh
+podman pull python:3.12-slim
+```
+
 ### 3. 初始化环境文件
 
 ```bash
@@ -196,20 +203,9 @@ powershell -ExecutionPolicy Bypass -File .\scripts\package-release.ps1
 - 在 Windows 上生成 `zip` 发行包
 - 自动创建或更新 GitHub Release，并上传两个附件
 
-## GitHub Actions 自动发布
+## 常见问题
 
-仓库已提供 GitHub Actions 工作流 [release.yml](.github/workflows/release.yml)。
-
-使用方式：
-
-- 推送与 [VERSION](VERSION) 一致的 tag，例如 `v0.1.0`
-- 或在 GitHub Actions 页面手动运行 `Release Packages`，并输入 tag
-
-工作流会自动：
-
-- 在 Ubuntu 上生成 `tar.gz` 发行包
-- 在 Windows 上生成 `zip` 发行包
-- 自动创建或更新 GitHub Release，并上传两个附件
+- 如果 `./scripts/up.sh` 卡在 `python:3.12-slim` 或其他镜像拉取阶段，通常是目标主机无法访问 `docker.io` 的 443 端口。先执行 [scripts/configure-container-mirrors.sh](scripts/configure-container-mirrors.sh)，再手工验证 `podman pull python:3.12-slim`。
 
 ## 已实现范围
 

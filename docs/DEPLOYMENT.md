@@ -15,6 +15,8 @@
 5. 执行 scripts/post-deploy-check.sh 完成启动后连通性检查。
 6. 访问 Grafana、Prometheus、Alertmanager 和 AI Engine 健康接口完成验证。
 
+如果目标主机无法拉取 docker.io 镜像，可先执行 scripts/configure-container-mirrors.sh，为 Podman 写入镜像源配置，再手工验证 `podman pull python:3.12-slim`。
+
 如需接入中间件监控，请在 .env 中配置 AIOPS_COMPOSE_PROFILES=middleware 或 AIOPS_COMPOSE_PROFILES=middleware,network，并参考 docs/MIDDLEWARE_MONITORING.md 补齐 exporter 参数与 Prometheus 目标文件。
 
 如需启用根因分析底座，请在 .env 中加入 analysis profile，并在组件启动后执行 scripts/sync-cmdb-to-neo4j.sh 将 CMDB 拓扑同步到 Neo4j。
@@ -42,8 +44,6 @@
 执行 scripts/package-release.sh 可在 releases 目录下生成 tar.gz 发行包，适合离线交付或版本归档。
 
 如果在 Windows 11 PowerShell 环境打包，可执行 scripts/package-release.ps1，生成 zip 发行包后再上传到 GitHub Release 或拷贝到 Linux 主机。
-
-仓库已提供 GitHub Actions 自动发布流程 .github/workflows/release.yml。推送与 VERSION 一致的 tag 后，可自动生成 Linux 和 Windows 发行包并发布到 GitHub Release。
 
 仓库已提供 GitHub Actions 自动发布流程 .github/workflows/release.yml。推送与 VERSION 一致的 tag 后，可自动生成 Linux 和 Windows 发行包并发布到 GitHub Release。
 
