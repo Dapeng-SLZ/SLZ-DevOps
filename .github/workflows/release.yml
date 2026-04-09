@@ -112,11 +112,3 @@ jobs:
           files: |
             dist/linux/*.tar.gz
             dist/windows/*.zip
-        with:
-          tag_name: ${{ needs.prepare.outputs.tag }}
-          target_commitish: ${{ github.sha }}
-          name: SLZ DevOps ${{ needs.prepare.outputs.tag }}
-          generate_release_notes: true
-          files: |
-            dist/linux/*.tar.gz
-            dist/windows/*.zip
