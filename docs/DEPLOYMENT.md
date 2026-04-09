@@ -41,6 +41,8 @@
 
 执行 scripts/package-release.sh 可在 releases 目录下生成 tar.gz 发行包，适合离线交付或版本归档。
 
+如果在 Windows 11 PowerShell 环境打包，可执行 scripts/package-release.ps1，生成 zip 发行包后再上传到 GitHub Release 或拷贝到 Linux 主机。
+
 ## 7. 生产建议
 
 - 将 .env 中默认密码替换为强口令。

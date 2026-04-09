@@ -170,7 +170,16 @@ ansible-playbook -i automation/ansible/inventory/production.ini automation/ansib
 ./scripts/package-release.sh
 ```
 
-输出文件位于 releases 目录，命名格式为 slz-devops-<version>.tar.gz。
+Windows PowerShell 环境可执行：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\package-release.ps1
+```
+
+输出文件位于 releases 目录：
+
+- Linux 脚本输出 `slz-devops-<version>.tar.gz`
+- Windows PowerShell 脚本输出 `slz-devops-<version>.zip`
 
 ## 已实现范围
 
