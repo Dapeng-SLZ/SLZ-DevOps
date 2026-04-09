@@ -5,7 +5,7 @@ $VersionFile = Join-Path $RootDir "VERSION"
 $ReleaseDir = Join-Path $RootDir "releases"
 
 if (-not (Test-Path $VersionFile)) {
-    throw "VERSION 文件不存在。"
+    throw "VERSION file not found."
 }
 
 $Version = (Get-Content $VersionFile -Raw).Trim()
@@ -31,4 +31,4 @@ Get-ChildItem -Force $RootDir | Where-Object {
 Compress-Archive -Path (Join-Path $StageDir "*") -DestinationPath $PackagePath -CompressionLevel Optimal
 Remove-Item $StageDir -Recurse -Force
 
-Write-Host "发行包已生成: $PackagePath"
+Write-Host "Release package generated: $PackagePath"
