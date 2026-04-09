@@ -15,6 +15,8 @@
 5. 执行 scripts/post-deploy-check.sh 完成启动后连通性检查。
 6. 访问 Grafana、Prometheus、Alertmanager 和 AI Engine 健康接口完成验证。
 
+在 openEuler + Podman 场景下，scripts/up.sh 会自动修正 data 目录写权限，避免 Prometheus 与 Loki 因挂载目录不可写而退出。
+
 如果目标主机无法拉取 docker.io 镜像，可先执行 scripts/configure-container-mirrors.sh，为 Podman 写入镜像源配置，再手工验证 `podman pull python:3.12-slim`。
 
 如需接入中间件监控，请在 .env 中配置 AIOPS_COMPOSE_PROFILES=middleware 或 AIOPS_COMPOSE_PROFILES=middleware,network，并参考 docs/MIDDLEWARE_MONITORING.md 补齐 exporter 参数与 Prometheus 目标文件。

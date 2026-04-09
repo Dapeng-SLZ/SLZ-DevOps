@@ -87,6 +87,8 @@ vi .env
 ./scripts/post-deploy-check.sh
 ```
 
+在 openEuler + Podman 场景下，`up.sh` 会自动为 `data/` 下的持久化目录补齐写权限，避免 Prometheus、Loki、Grafana 等非 root 容器因无法写入挂载目录而启动失败。
+
 ### 5. 验证服务
 
 ```bash
