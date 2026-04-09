@@ -17,6 +17,10 @@
 
 如需接入中间件监控，请在 .env 中配置 AIOPS_COMPOSE_PROFILES=middleware 或 AIOPS_COMPOSE_PROFILES=middleware,network，并参考 docs/MIDDLEWARE_MONITORING.md 补齐 exporter 参数与 Prometheus 目标文件。
 
+如需启用根因分析底座，请在 .env 中加入 analysis profile，并在组件启动后执行 scripts/sync-cmdb-to-neo4j.sh 将 CMDB 拓扑同步到 Neo4j。
+
+如需验证调用链追踪，请在 .env 中加入 demo profile，并在组件启动后执行 scripts/generate-demo-trace.sh 生成示例 trace。
+
 ## 3. 默认访问地址
 
 - Grafana：http://<host>:13000

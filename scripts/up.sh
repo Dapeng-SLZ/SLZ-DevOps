@@ -8,7 +8,7 @@ source "${ROOT_DIR}/scripts/lib/runtime.sh"
 
 "${ROOT_DIR}/scripts/preflight-check.sh"
 
-mkdir -p "${ROOT_DIR}/data/prometheus" "${ROOT_DIR}/data/alertmanager" "${ROOT_DIR}/data/grafana" "${ROOT_DIR}/data/loki" "${ROOT_DIR}/data/promtail"
+mkdir -p "${ROOT_DIR}/data/prometheus" "${ROOT_DIR}/data/alertmanager" "${ROOT_DIR}/data/grafana" "${ROOT_DIR}/data/loki" "${ROOT_DIR}/data/promtail" "${ROOT_DIR}/data/tempo" "${ROOT_DIR}/data/neo4j/data" "${ROOT_DIR}/data/neo4j/logs"
 
 if [[ ! -f "${ENV_FILE}" ]]; then
   cp "${ROOT_DIR}/.env.example" "${ENV_FILE}"

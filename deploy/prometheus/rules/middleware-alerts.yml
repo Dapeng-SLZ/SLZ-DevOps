@@ -1,0 +1,72 @@
+groups:
+  - name: slz-middleware
+    rules:
+      - alert: NginxExporterDown
+        expr: up{job="nginx-exporter"} == 0
+        for: 2m
+        labels:
+          severity: warning
+          domain: nginx
+        annotations:
+          summary: Nginx exporter unavailable
+          description: Nginx exporter target {{ $labels.instance }} is unreachable for more than 2 minutes.
+
+      - alert: MySQLExporterDown
+        expr: up{job="mysqld-exporter"} == 0
+        for: 2m
+        labels:
+          severity: warning
+          domain: mysql
+        annotations:
+          summary: MySQL exporter unavailable
+          description: MySQL exporter target {{ $labels.instance }} is unreachable for more than 2 minutes.
+
+      - alert: MySQLHighConnectionUsage
+        expr: (mysql_global_status_threads_connected / mysql_global_variables_max_connections) * 100 > 80
+        for: 5m
+        labels:
+          severity: warning
+          domain: mysql
+        annotations:
+          summary: MySQL connection usage is high
+          description: MySQL connection usage on {{ $labels.instance }} exceeds 80% for 5 minutes.
+
+      - alert: MySQLSlowQueriesDetected
+        expr: rate(mysql_global_status_slow_queries[5m]) > 0
+        for: 10m
+        labels:
+          severity: warning
+          domain: mysql
+        annotations:
+          summary: MySQL slow queries detected
+          description: MySQL slow queries are increasing on {{ $labels.instance }}.
+
+      - alert: RedisExporterDown
+        expr: up{job="redis-exporter"} == 0
+        for: 2m
+        labels:
+          severity: warning
+          domain: redis
+        annotations:
+          summary: Redis exporter unavailable
+          description: Redis exporter target {{ $labels.instance }} is unreachable for more than 2 minutes.
+
+      - alert: RedisRejectedConnections
+        expr: increase(redis_rejected_connections_total[5m]) > 0
+        for: 5m
+        labels:
+          severity: warning
+          domain: redis
+        annotations:
+          summary: Redis rejected connections detected
+          description: Redis rejected connections increased on {{ $labels.instance }} within the last 5 minutes.
+
+      - alert: SNMPTargetDown
+        expr: up{job="snmp"} == 0
+        for: 5m
+        labels:
+          severity: warning
+          domain: network
+        annotations:
+          summary: SNMP target unavailable
+          description: SNMP target {{ $labels.instance }} is unreachable for more than 5 minutes.

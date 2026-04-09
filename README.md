@@ -93,6 +93,18 @@ curl http://127.0.0.1:18080/healthz
 sudo ./scripts/install-systemd-service.sh
 ```
 
+### 7. 同步 CMDB 到 Neo4j
+
+```bash
+./scripts/sync-cmdb-to-neo4j.sh
+```
+
+### 8. 生成示例 Trace
+
+```bash
+./scripts/generate-demo-trace.sh
+```
+
 ## 默认访问地址
 
 - Grafana：http://<host>:13000
@@ -124,6 +136,23 @@ services/ai-engine 提供当前版本的最小能力闭环：
 
 启用方式见 [docs/MIDDLEWARE_MONITORING.md](docs/MIDDLEWARE_MONITORING.md)。
 
+## 根因分析底座
+
+当前已补充分析层基础组件：
+
+- CMDB 服务
+- Neo4j 图数据库
+- Grafana Tempo 链路存储
+- AI 引擎根因分析接口
+
+启用 `analysis` profile 后，可作为后续拓扑推理、链路关联和故障传播分析的基础。 
+
+## OTEL 示例链路
+
+当前已内置 demo-gateway 和 demo-order 两个示例服务，可通过 OTLP 将跨服务 trace 写入 Tempo，用于本地验证链路追踪能力。
+
+启用方式见 [docs/OTEL_DEMO.md](docs/OTEL_DEMO.md)。
+
 ## 自动化发布
 
 可使用 Ansible 进行节点初始化与平台发布：
@@ -150,21 +179,28 @@ ansible-playbook -i automation/ansible/inventory/production.ini automation/ansib
 - 启动前预检、启动后检查、自启动托管脚本
 - 容器化发行版目录结构
 - Grafana 数据源与基础看板预置
+- 中间件监控看板与默认告警规则
+- CMDB、Neo4j、Tempo 与根因分析基础接口
+- CMDB 与 AI 引擎自动拓扑联动
+- OTEL 示例链路与 Tempo 验证路径
 - AI 引擎最小分析服务
 - Ansible 发布骨架
 - 离线发行打包脚本
 
 ## 下一阶段建议
 
-- 接入 VictoriaMetrics、Tempo、Neo4j、CMDB 服务
+- 接入 VictoriaMetrics 和更长期存储方案
 - 将 Alertmanager 路由扩展到企业微信、钉钉、邮件和工单系统
-- 增加 Nginx、MySQL、Redis、SNMP Exporter 模块化配置
-- 为 AI 引擎补充特征存储、根因推理和自愈执行编排
+- 为 AI 引擎补充特征存储、图推理、LLM 分析和自愈执行编排
+- 为 CMDB、Neo4j、Tempo 增加自动发现与数据写入链路
 
 ## 文档
 
 - [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)
 - [docs/MIDDLEWARE_MONITORING.md](docs/MIDDLEWARE_MONITORING.md)
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
+- [docs/ROOT_CAUSE_ANALYSIS.md](docs/ROOT_CAUSE_ANALYSIS.md)
+- [docs/OTEL_DEMO.md](docs/OTEL_DEMO.md)
+
 
 

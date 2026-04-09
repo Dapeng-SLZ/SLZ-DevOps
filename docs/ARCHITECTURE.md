@@ -12,7 +12,10 @@
 - Loki + Promtail：负责日志聚合。
 - Blackbox Exporter：负责基础探测。
 - Node Exporter：负责主机资源采集。
-- AIOps Engine：负责分析接口、Webhook 汇聚与后续 AI 扩展。
+- Tempo：负责链路追踪存储与查询。
+- CMDB：负责服务元数据、依赖关系和责任边界。
+- Neo4j：负责图关系与后续知识图谱扩展。
+- AIOps Engine：负责分析接口、Webhook 汇聚、根因分析与后续 AI 扩展。
 
 ## 3. 落地原则
 
@@ -23,6 +26,7 @@
 
 ## 4. 后续扩展建议
 
-- 在 deploy 目录下新增 mysql、redis、snmp、tempo、neo4j、cmdb 子模块。
+- 继续扩展 deploy 目录下的分析与数据模块，并补齐高可用部署方案。
 - 将 AI Engine 拆分为 detection、correlation、remediation 三个服务。
 - 把脚本交付升级为 RPM 包或离线安装包，形成正式发行件。
+

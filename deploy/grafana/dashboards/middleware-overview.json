@@ -1,0 +1,105 @@
+{
+  "annotations": {"list": []},
+  "editable": true,
+  "graphTooltip": 0,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {"type": "prometheus", "uid": "-- Grafana --"},
+      "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
+      "gridPos": {"h": 6, "w": 6, "x": 0, "y": 0},
+      "id": 1,
+      "options": {"reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "showThresholdLabels": false, "showThresholdMarkers": true},
+      "pluginVersion": "11.2.2",
+      "targets": [{"expr": "sum(up{job=\"nginx-exporter\"})", "refId": "A"}],
+      "title": "Nginx Exporter 在线数",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "-- Grafana --"},
+      "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
+      "gridPos": {"h": 6, "w": 6, "x": 6, "y": 0},
+      "id": 2,
+      "options": {"reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "showThresholdLabels": false, "showThresholdMarkers": true},
+      "pluginVersion": "11.2.2",
+      "targets": [{"expr": "sum(up{job=\"mysqld-exporter\"})", "refId": "A"}],
+      "title": "MySQL Exporter 在线数",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "-- Grafana --"},
+      "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
+      "gridPos": {"h": 6, "w": 6, "x": 12, "y": 0},
+      "id": 3,
+      "options": {"reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "showThresholdLabels": false, "showThresholdMarkers": true},
+      "pluginVersion": "11.2.2",
+      "targets": [{"expr": "sum(up{job=\"redis-exporter\"})", "refId": "A"}],
+      "title": "Redis Exporter 在线数",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "-- Grafana --"},
+      "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
+      "gridPos": {"h": 6, "w": 6, "x": 18, "y": 0},
+      "id": 4,
+      "options": {"reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "showThresholdLabels": false, "showThresholdMarkers": true},
+      "pluginVersion": "11.2.2",
+      "targets": [{"expr": "sum(up{job=\"snmp\"})", "refId": "A"}],
+      "title": "SNMP 在线目标数",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "-- Grafana --"},
+      "fieldConfig": {"defaults": {"unit": "reqps"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 6},
+      "id": 5,
+      "options": {"legend": {"displayMode": "list", "placement": "bottom"}},
+      "pluginVersion": "11.2.2",
+      "targets": [{"expr": "rate(nginx_http_requests_total[5m])", "legendFormat": "{{instance}}", "refId": "A"}],
+      "title": "Nginx 请求速率",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "-- Grafana --"},
+      "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 6},
+      "id": 6,
+      "options": {"legend": {"displayMode": "list", "placement": "bottom"}},
+      "pluginVersion": "11.2.2",
+      "targets": [{"expr": "mysql_global_status_threads_connected", "legendFormat": "{{instance}}", "refId": "A"}],
+      "title": "MySQL 当前连接数",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "-- Grafana --"},
+      "fieldConfig": {"defaults": {"unit": "bytes"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 14},
+      "id": 7,
+      "options": {"legend": {"displayMode": "list", "placement": "bottom"}},
+      "pluginVersion": "11.2.2",
+      "targets": [{"expr": "redis_memory_used_bytes", "legendFormat": "{{instance}}", "refId": "A"}],
+      "title": "Redis 内存使用",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "-- Grafana --"},
+      "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 14},
+      "id": 8,
+      "options": {"legend": {"displayMode": "list", "placement": "bottom"}},
+      "pluginVersion": "11.2.2",
+      "targets": [{"expr": "ifOperStatus", "legendFormat": "{{instance}}/{{ifIndex}}", "refId": "A"}],
+      "title": "SNMP 接口状态",
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 39,
+  "style": "dark",
+  "tags": ["slz", "aiops", "middleware"],
+  "templating": {"list": []},
+  "time": {"from": "now-6h", "to": "now"},
+  "timezone": "browser",
+  "title": "SLZ Middleware Overview",
+  "version": 1
+}

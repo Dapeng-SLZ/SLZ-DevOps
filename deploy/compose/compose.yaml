@@ -72,6 +72,24 @@ services:
       - aiops-net
     restart: unless-stopped
 
+  tempo:
+    image: grafana/tempo:2.6.1
+    container_name: slz-tempo
+    command: ["-config.file=/etc/tempo/tempo.yml"]
+    ports:
+      - "${TEMPO_PORT:-13200}:3200"
+      - "4317:4317"
+      - "4318:4318"
+    volumes:
+      - ../tempo/tempo.yml:/etc/tempo/tempo.yml:ro
+      - ../../data/tempo:/tmp/tempo
+    profiles:
+      - analysis
+      - demo
+    networks:
+      - aiops-net
+    restart: unless-stopped
+
   promtail:
     image: grafana/promtail:3.1.1
     container_name: slz-promtail
@@ -163,6 +181,7 @@ services:
     environment:
       AIOPS_APP_NAME: SLZ AIOps Engine
       AIOPS_ALERT_WEBHOOK_TOKEN: changeme
+      AIOPS_CMDB_URL: http://cmdb:8081
     ports:
       - "${AI_ENGINE_PORT:-18080}:8080"
     healthcheck:
@@ -171,6 +190,80 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
+    networks:
+      - aiops-net
+    restart: unless-stopped
+
+  cmdb:
+    build:
+      context: ../../services/cmdb
+    container_name: slz-cmdb
+    environment:
+      CMDB_APP_NAME: SLZ CMDB Service
+      CMDB_DATA_FILE: /app/data/seed.json
+    ports:
+      - "${CMDB_PORT:-18081}:8081"
+    volumes:
+      - ../../services/cmdb/data:/app/data:ro
+    profiles:
+      - analysis
+    networks:
+      - aiops-net
+    restart: unless-stopped
+
+  neo4j:
+    image: neo4j:5.24.0
+    container_name: slz-neo4j
+    environment:
+      NEO4J_AUTH: ${NEO4J_AUTH:-neo4j/change_me_now}
+    ports:
+      - "${NEO4J_HTTP_PORT:-17474}:7474"
+      - "${NEO4J_BOLT_PORT:-17687}:7687"
+    volumes:
+      - ../../data/neo4j/data:/data
+      - ../../data/neo4j/logs:/logs
+    profiles:
+      - analysis
+    networks:
+      - aiops-net
+    restart: unless-stopped
+
+  demo-gateway:
+    build:
+      context: ../../services/demo-gateway
+    container_name: slz-demo-gateway
+    environment:
+      OTEL_SERVICE_NAME: demo-gateway
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo:4318
+      OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
+      OTEL_RESOURCE_ATTRIBUTES: deployment.environment=local,service.namespace=slz-demo
+      ORDER_SERVICE_URL: http://demo-order:8083
+    ports:
+      - "${DEMO_GATEWAY_PORT:-18082}:8082"
+    depends_on:
+      - tempo
+      - demo-order
+    profiles:
+      - demo
+    networks:
+      - aiops-net
+    restart: unless-stopped
+
+  demo-order:
+    build:
+      context: ../../services/demo-order
+    container_name: slz-demo-order
+    environment:
+      OTEL_SERVICE_NAME: demo-order
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://tempo:4318
+      OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
+      OTEL_RESOURCE_ATTRIBUTES: deployment.environment=local,service.namespace=slz-demo
+    ports:
+      - "${DEMO_ORDER_PORT:-18083}:8083"
+    depends_on:
+      - tempo
+    profiles:
+      - demo
     networks:
       - aiops-net
     restart: unless-stopped

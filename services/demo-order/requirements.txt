@@ -1,0 +1,5 @@
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+opentelemetry-distro==0.49b2
+opentelemetry-exporter-otlp==1.28.2
+opentelemetry-instrumentation-fastapi==0.49b2
