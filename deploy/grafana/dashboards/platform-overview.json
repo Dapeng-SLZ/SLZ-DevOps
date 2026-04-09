@@ -1,0 +1,50 @@
+{
+  "annotations": {"list": []},
+  "editable": true,
+  "graphTooltip": 0,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {"type": "prometheus", "uid": "-- Grafana --"},
+      "fieldConfig": {"defaults": {"unit": "percent"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+      "id": 1,
+      "options": {"reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "showThresholdLabels": false, "showThresholdMarkers": true},
+      "pluginVersion": "11.2.2",
+      "targets": [{"expr": "100 - (avg(rate(node_cpu_seconds_total{mode=\"idle\"}[5m])) * 100)", "refId": "A"}],
+      "title": "CPU 使用率",
+      "type": "gauge"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "-- Grafana --"},
+      "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0},
+      "id": 2,
+      "options": {"reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "showThresholdLabels": false, "showThresholdMarkers": true},
+      "pluginVersion": "11.2.2",
+      "targets": [{"expr": "sum(ALERTS{alertstate=\"firing\"})", "refId": "A"}],
+      "title": "当前告警数",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "-- Grafana --"},
+      "fieldConfig": {"defaults": {"unit": "reqps"}, "overrides": []},
+      "gridPos": {"h": 9, "w": 24, "x": 0, "y": 8},
+      "id": 3,
+      "options": {"legend": {"displayMode": "list", "placement": "bottom"}},
+      "pluginVersion": "11.2.2",
+      "targets": [{"expr": "rate(aiops_requests_total[5m])", "legendFormat": "{{path}}", "refId": "A"}],
+      "title": "AI 引擎请求速率",
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 39,
+  "style": "dark",
+  "tags": ["slz", "aiops"],
+  "templating": {"list": []},
+  "time": {"from": "now-6h", "to": "now"},
+  "timezone": "browser",
+  "title": "SLZ AIOps Platform Overview",
+  "version": 1
+}

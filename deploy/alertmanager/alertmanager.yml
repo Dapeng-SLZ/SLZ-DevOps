@@ -1,0 +1,15 @@
+global:
+  resolve_timeout: 5m
+
+route:
+  group_by: [alertname, domain]
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 4h
+  receiver: ai-engine-webhook
+
+receivers:
+  - name: ai-engine-webhook
+    webhook_configs:
+      - url: http://ai-engine:8080/api/v1/alerts/webhook
+        send_resolved: true

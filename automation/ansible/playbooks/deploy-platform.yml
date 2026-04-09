@@ -1,0 +1,31 @@
+---
+- name: Deploy SLZ AIOps platform to control node
+  hosts: platform
+  become: true
+  tasks:
+    - name: Ensure platform root exists
+      ansible.builtin.file:
+        path: "{{ platform_root }}"
+        state: directory
+        mode: "0755"
+
+    - name: Synchronize repository
+      ansible.posix.synchronize:
+        src: ../../
+        dest: "{{ platform_root }}/current"
+        delete: false
+        recursive: true
+
+    - name: Copy environment template when missing
+      ansible.builtin.copy:
+        src: "{{ platform_root }}/current/.env.example"
+        dest: "{{ platform_root }}/current/.env"
+        remote_src: true
+        force: false
+        mode: "0644"
+
+    - name: Start platform stack
+      ansible.builtin.shell: ./scripts/up.sh
+      args:
+        chdir: "{{ platform_root }}/current"
+      changed_when: true

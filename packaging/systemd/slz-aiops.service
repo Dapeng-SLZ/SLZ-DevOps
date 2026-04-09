@@ -1,0 +1,16 @@
+[Unit]
+Description=SLZ AIOps Platform
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/slz-devops/current
+ExecStart=/opt/slz-devops/current/scripts/up.sh
+ExecStop=/opt/slz-devops/current/scripts/down.sh
+RemainAfterExit=yes
+TimeoutStartSec=600
+TimeoutStopSec=180
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,6 @@
+- targets:
+    - 192.168.56.254
+  labels:
+    module: if_mib
+    env: local
+    vendor: generic

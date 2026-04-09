@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+.pytest_cache/
+*.pyc
+*.pyo
+*.pyd
+*.log
+.env
+data/
+deploy/grafana/data/
+deploy/loki/data/
+deploy/prometheus/data/
+deploy/promtail/positions.yaml

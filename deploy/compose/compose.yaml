@@ -1,0 +1,180 @@
+name: slz-aiops
+
+services:
+  prometheus:
+    image: prom/prometheus:v2.55.1
+    container_name: slz-prometheus
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --web.enable-lifecycle
+    ports:
+      - "${PROMETHEUS_PORT:-19090}:9090"
+    volumes:
+      - ../prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ../prometheus/rules:/etc/prometheus/rules:ro
+      - ../prometheus/targets:/etc/prometheus/targets:ro
+      - ../../data/prometheus:/prometheus
+    depends_on:
+      - alertmanager
+      - ai-engine
+      - blackbox-exporter
+      - node-exporter
+    networks:
+      - aiops-net
+    restart: unless-stopped
+
+  alertmanager:
+    image: prom/alertmanager:v0.27.0
+    container_name: slz-alertmanager
+    command:
+      - --config.file=/etc/alertmanager/alertmanager.yml
+      - --storage.path=/alertmanager
+    ports:
+      - "${ALERTMANAGER_PORT:-19093}:9093"
+    volumes:
+      - ../alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+      - ../../data/alertmanager:/alertmanager
+    networks:
+      - aiops-net
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:11.2.2
+    container_name: slz-grafana
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-admin123}
+      GF_AUTH_ANONYMOUS_ENABLED: "false"
+    ports:
+      - "${GRAFANA_PORT:-13000}:3000"
+    volumes:
+      - ../grafana/provisioning:/etc/grafana/provisioning:ro
+      - ../grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - ../../data/grafana:/var/lib/grafana
+    depends_on:
+      - prometheus
+      - loki
+    networks:
+      - aiops-net
+    restart: unless-stopped
+
+  loki:
+    image: grafana/loki:3.1.1
+    container_name: slz-loki
+    command: ["-config.file=/etc/loki/config.yml"]
+    ports:
+      - "${LOKI_PORT:-13100}:3100"
+    volumes:
+      - ../loki/config.yml:/etc/loki/config.yml:ro
+      - ../../data/loki:/loki
+    networks:
+      - aiops-net
+    restart: unless-stopped
+
+  promtail:
+    image: grafana/promtail:3.1.1
+    container_name: slz-promtail
+    command: ["-config.file=/etc/promtail/config.yml"]
+    volumes:
+      - ../promtail/config.yml:/etc/promtail/config.yml:ro
+      - ../../data/promtail:/tmp
+      - /var/log:/var/log:ro
+    depends_on:
+      - loki
+    networks:
+      - aiops-net
+    restart: unless-stopped
+
+  blackbox-exporter:
+    image: prom/blackbox-exporter:v0.25.0
+    container_name: slz-blackbox
+    command: ["--config.file=/etc/blackbox_exporter/config.yml"]
+    ports:
+      - "${BLACKBOX_PORT:-19115}:9115"
+    volumes:
+      - ../blackbox/blackbox.yml:/etc/blackbox_exporter/config.yml:ro
+    networks:
+      - aiops-net
+    restart: unless-stopped
+
+  nginx-exporter:
+    image: nginx/nginx-prometheus-exporter:1.3.0
+    container_name: slz-nginx-exporter
+    command:
+      - --nginx.scrape-uri=${NGINX_STATUS_URI:-http://127.0.0.1:8081/stub_status}
+    profiles:
+      - middleware
+    networks:
+      - aiops-net
+    restart: unless-stopped
+
+  mysqld-exporter:
+    image: prom/mysqld-exporter:v0.16.0
+    container_name: slz-mysqld-exporter
+    environment:
+      DATA_SOURCE_NAME: ${MYSQL_EXPORTER_DSN:-exporter:change_me@(127.0.0.1:3306)/}
+    profiles:
+      - middleware
+    networks:
+      - aiops-net
+    restart: unless-stopped
+
+  redis-exporter:
+    image: oliver006/redis_exporter:v1.63.0
+    container_name: slz-redis-exporter
+    environment:
+      REDIS_ADDR: ${REDIS_EXPORTER_ADDR:-redis://127.0.0.1:6379}
+      REDIS_PASSWORD: ${REDIS_EXPORTER_PASSWORD:-}
+    profiles:
+      - middleware
+    networks:
+      - aiops-net
+    restart: unless-stopped
+
+  snmp-exporter:
+    image: prom/snmp-exporter:v0.26.0
+    container_name: slz-snmp-exporter
+    command:
+      - --config.file=/etc/snmp_exporter/snmp.yml
+    volumes:
+      - ../snmp/snmp.yml:/etc/snmp_exporter/snmp.yml:ro
+    profiles:
+      - network
+    networks:
+      - aiops-net
+    restart: unless-stopped
+
+  node-exporter:
+    image: prom/node-exporter:v1.8.2
+    container_name: slz-node-exporter
+    command:
+      - --path.rootfs=/host
+    volumes:
+      - /:/host:ro,rslave
+    networks:
+      - aiops-net
+    restart: unless-stopped
+
+  ai-engine:
+    build:
+      context: ../../services/ai-engine
+    container_name: slz-ai-engine
+    environment:
+      AIOPS_APP_NAME: SLZ AIOps Engine
+      AIOPS_ALERT_WEBHOOK_TOKEN: changeme
+    ports:
+      - "${AI_ENGINE_PORT:-18080}:8080"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/healthz', timeout=5)"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - aiops-net
+    restart: unless-stopped
+
+networks:
+  aiops-net:
+    driver: bridge

@@ -1,0 +1,5 @@
+- targets:
+    - mysqld-exporter:9104
+  labels:
+    service: mysql
+    env: local

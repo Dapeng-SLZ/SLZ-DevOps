@@ -1,0 +1,5 @@
+- targets:
+    - nginx-exporter:9113
+  labels:
+    service: nginx
+    env: local

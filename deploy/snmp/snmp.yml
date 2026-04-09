@@ -1,0 +1,23 @@
+auths:
+  public_v2:
+    community: public
+    security_level: noAuthNoPriv
+    auth_protocol: MD5
+    priv_protocol: DES
+    version: 2
+
+modules:
+  if_mib:
+    walk:
+      - 1.3.6.1.2.1.1.3.0
+      - 1.3.6.1.2.1.2.2.1.1
+      - 1.3.6.1.2.1.2.2.1.2
+      - 1.3.6.1.2.1.2.2.1.8
+      - 1.3.6.1.2.1.2.2.1.10
+      - 1.3.6.1.2.1.2.2.1.16
+    lookups:
+      - source_indexes: [ifIndex]
+        lookup: ifDescr
+    overrides:
+      ifDescr:
+        ignore: true

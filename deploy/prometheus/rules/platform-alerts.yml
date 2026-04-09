@@ -1,0 +1,32 @@
+groups:
+  - name: slz-platform
+    rules:
+      - alert: AIOpsEngineDown
+        expr: up{job="ai-engine"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          domain: platform
+        annotations:
+          summary: AIOps engine unavailable
+          description: ai-engine service is unreachable for more than 1 minute.
+
+      - alert: HostHighCpuUsage
+        expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 85
+        for: 5m
+        labels:
+          severity: warning
+          domain: host
+        annotations:
+          summary: Host CPU usage is high
+          description: CPU usage on {{ $labels.instance }} exceeds 85% for 5 minutes.
+
+      - alert: BlackboxProbeFailed
+        expr: probe_success == 0
+        for: 2m
+        labels:
+          severity: warning
+          domain: probe
+        annotations:
+          summary: HTTP probe failed
+          description: Probe failed for {{ $labels.instance }}.
