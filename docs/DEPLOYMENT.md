@@ -45,6 +45,8 @@
 
 仓库已提供 GitHub Actions 自动发布流程 .github/workflows/release.yml。推送与 VERSION 一致的 tag 后，可自动生成 Linux 和 Windows 发行包并发布到 GitHub Release。
 
+仓库已提供 GitHub Actions 自动发布流程 .github/workflows/release.yml。推送与 VERSION 一致的 tag 后，可自动生成 Linux 和 Windows 发行包并发布到 GitHub Release。
+
 ## 7. 生产建议
 
 - 将 .env 中默认密码替换为强口令。

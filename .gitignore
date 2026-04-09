@@ -1,9 +1,11 @@
 .venv/
+releases/
 __pycache__/
 .pytest_cache/
 *.pyc
 *.pyo
 *.pyd
+
 *.log
 .env
 releases/
