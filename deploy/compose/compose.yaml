@@ -15,11 +15,6 @@ services:
       - ../prometheus/rules:/etc/prometheus/rules:ro
       - ../prometheus/targets:/etc/prometheus/targets:ro
       - ../../data/prometheus:/prometheus
-    depends_on:
-      - alertmanager
-      - ai-engine
-      - blackbox-exporter
-      - node-exporter
     networks:
       - aiops-net
     restart: unless-stopped
@@ -52,9 +47,6 @@ services:
       - ../grafana/provisioning:/etc/grafana/provisioning:ro
       - ../grafana/dashboards:/var/lib/grafana/dashboards:ro
       - ../../data/grafana:/var/lib/grafana
-    depends_on:
-      - prometheus
-      - loki
     networks:
       - aiops-net
     restart: unless-stopped
@@ -98,8 +90,6 @@ services:
       - ../promtail/config.yml:/etc/promtail/config.yml:ro
       - ../../data/promtail:/tmp
       - /var/log:/var/log:ro
-    depends_on:
-      - loki
     networks:
       - aiops-net
     restart: unless-stopped
@@ -240,9 +230,6 @@ services:
       ORDER_SERVICE_URL: http://demo-order:8083
     ports:
       - "${DEMO_GATEWAY_PORT:-18082}:8082"
-    depends_on:
-      - tempo
-      - demo-order
     profiles:
       - demo
     networks:
@@ -260,8 +247,6 @@ services:
       OTEL_RESOURCE_ATTRIBUTES: deployment.environment=local,service.namespace=slz-demo
     ports:
       - "${DEMO_ORDER_PORT:-18083}:8083"
-    depends_on:
-      - tempo
     profiles:
       - demo
     networks:
