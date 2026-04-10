@@ -7,7 +7,15 @@ if [[ "$(id -u)" -ne 0 ]]; then
 fi
 
 dnf makecache
-dnf install -y git curl wget tar podman python3 python3-pip firewalld rsync netavark aardvark-dns
+dnf install -y git curl wget tar podman python3 python3-pip firewalld rsync
+
+if ! command -v netavark >/dev/null 2>&1; then
+  dnf install -y netavark
+fi
+
+if ! command -v aardvark-dns >/dev/null 2>&1; then
+  dnf install -y aardvark-dns || echo "警告: 仓库中未找到 aardvark-dns，继续安装。若后续容器间服务名解析异常，请补充 DNS 组件。"
+fi
 
 if ! dnf install -y podman-compose; then
   echo "dnf 未提供 podman-compose，改用 pip 安装。"

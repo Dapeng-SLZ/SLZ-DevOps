@@ -11,8 +11,21 @@ CONFIG_FILE="${CONFIG_DIR}/containers.conf"
 
 mkdir -p "${CONFIG_DIR}"
 
-if ! dnf install -y netavark aardvark-dns; then
-  echo "安装 netavark 或 aardvark-dns 失败。" >&2
+if ! command -v netavark >/dev/null 2>&1; then
+  if ! dnf install -y netavark; then
+    echo "安装 netavark 失败。" >&2
+    exit 1
+  fi
+fi
+
+if ! command -v aardvark-dns >/dev/null 2>&1; then
+  if ! dnf install -y aardvark-dns; then
+    echo "未在仓库中找到 aardvark-dns，继续切换到 netavark。若后续容器间服务名解析异常，请手动确认 DNS 组件来源。"
+  fi
+fi
+
+if ! command -v netavark >/dev/null 2>&1; then
+  echo "当前系统仍未检测到 netavark 可执行文件。" >&2
   exit 1
 fi
 
