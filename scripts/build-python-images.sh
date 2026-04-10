@@ -37,9 +37,22 @@ build_image() {
     "${context_dir}"
 }
 
+build_generic_image() {
+  local service_name="$1"
+  local context_dir="$2"
+  local image_tag="localhost/${PROJECT_NAME}_${service_name}:latest"
+
+  echo "[INFO] 构建镜像: ${image_tag}"
+  podman build \
+    --network host \
+    -t "${image_tag}" \
+    "${context_dir}"
+}
+
 build_image "ai-engine" "${ROOT_DIR}/services/ai-engine"
 
 if has_profile console; then
+  build_generic_image "console" "${ROOT_DIR}/apps/console"
   build_image "job-runner" "${ROOT_DIR}/services/job-runner"
 fi
 
