@@ -7,7 +7,7 @@ if [[ "$(id -u)" -ne 0 ]]; then
 fi
 
 dnf makecache
-dnf install -y git curl wget tar podman python3 python3-pip firewalld rsync
+dnf install -y git curl wget tar podman python3 python3-pip firewalld rsync netavark aardvark-dns
 
 if ! dnf install -y podman-compose; then
   echo "dnf 未提供 podman-compose，改用 pip 安装。"
@@ -22,6 +22,12 @@ fi
 
 systemctl enable --now firewalld
 systemctl enable --now podman.socket || true
+
+mkdir -p /etc/containers
+cat >/etc/containers/containers.conf <<'EOF'
+[network]
+network_backend = "netavark"
+EOF
 
 mkdir -p /opt/slz-devops/{data,logs,releases}
 mkdir -p /opt/slz-devops/current

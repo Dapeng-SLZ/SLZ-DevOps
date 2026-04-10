@@ -67,6 +67,15 @@ sudo ./scripts/configure-container-mirrors.sh
 podman pull python:3.12-slim
 ```
 
+如果容器内部访问正常，但宿主机访问 `13000`、`19090` 等映射端口持续超时，请执行：
+
+```bash
+sudo ./scripts/fix-podman-network.sh
+./scripts/up.sh
+```
+
+该脚本会把 Podman 网络后端从 `cni` 切换为 `netavark`，用于修复 openEuler 上宿主机端口映射异常的问题。
+
 ### 3. 初始化环境文件
 
 ```bash
@@ -208,6 +217,7 @@ powershell -ExecutionPolicy Bypass -File .\scripts\package-release.ps1
 ## 常见问题
 
 - 如果 `./scripts/up.sh` 卡在 `python:3.12-slim` 或其他镜像拉取阶段，通常是目标主机无法访问 `docker.io` 的 443 端口。先执行 [scripts/configure-container-mirrors.sh](scripts/configure-container-mirrors.sh)，再手工验证 `podman pull python:3.12-slim`。
+- 如果容器内部 `wget http://127.0.0.1:3000/login`、`wget http://127.0.0.1:9090/-/healthy` 能返回，但宿主机 `curl http://127.0.0.1:13000`、`curl http://127.0.0.1:19090` 一直超时，优先检查 `podman info --format '{{.Host.NetworkBackend}}'` 是否为 `cni`。如是，执行 [scripts/fix-podman-network.sh](scripts/fix-podman-network.sh) 切换到 `netavark`。
 
 ## 已实现范围
 
