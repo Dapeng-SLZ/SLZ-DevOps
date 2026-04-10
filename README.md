@@ -147,6 +147,8 @@ sudo ./scripts/install-systemd-service.sh
 
 正式发布验收清单见 [docs/RELEASE_ACCEPTANCE.md](docs/RELEASE_ACCEPTANCE.md)。
 
+`v0.2.0` 发布说明见 [docs/RELEASE_NOTES_v0.2.0.md](docs/RELEASE_NOTES_v0.2.0.md)。
+
 启用方式：
 
 ```bash
