@@ -39,6 +39,10 @@ build_image() {
 
 build_image "ai-engine" "${ROOT_DIR}/services/ai-engine"
 
+if has_profile console; then
+  build_image "job-runner" "${ROOT_DIR}/services/job-runner"
+fi
+
 if has_profile analysis; then
   build_image "cmdb" "${ROOT_DIR}/services/cmdb"
 fi

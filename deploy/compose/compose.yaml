@@ -178,12 +178,50 @@ services:
       AIOPS_CMDB_URL: http://cmdb:8081
     ports:
       - "${AI_ENGINE_PORT:-18080}:8080"
+    volumes:
+      - ../../data/platform:/app/runtime:Z
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/healthz', timeout=5)"]
       interval: 30s
       timeout: 5s
       retries: 5
       start_period: 10s
+    networks:
+      - aiops-net
+    restart: unless-stopped
+
+  console:
+    build:
+      context: ../../apps/console
+    container_name: slz-console
+    ports:
+      - "${CONSOLE_PORT:-14000}:80"
+    profiles:
+      - console
+    networks:
+      - aiops-net
+    restart: unless-stopped
+
+  job-runner:
+    build:
+      context: ../../services/job-runner
+      network: host
+      args:
+        PIP_INDEX_URL: ${PIP_INDEX_URL:-https://pypi.tuna.tsinghua.edu.cn/simple}
+        PIP_TRUSTED_HOST: ${PIP_TRUSTED_HOST:-pypi.tuna.tsinghua.edu.cn}
+    container_name: slz-job-runner
+    environment:
+      JOB_RUNNER_APP_NAME: SLZ Job Runner
+      JOB_RUNNER_AI_ENGINE_URL: http://ai-engine:8080
+      JOB_RUNNER_CMDB_URL: http://cmdb:8081
+      JOB_RUNNER_PROMETHEUS_URL: http://prometheus:9090
+      JOB_RUNNER_ALERTMANAGER_URL: http://alertmanager:9093
+    ports:
+      - "${JOB_RUNNER_PORT:-18084}:8084"
+    volumes:
+      - ../../data/platform:/app/runtime:Z
+    profiles:
+      - console
     networks:
       - aiops-net
     restart: unless-stopped
@@ -202,7 +240,8 @@ services:
     ports:
       - "${CMDB_PORT:-18081}:8081"
     volumes:
-      - ../../services/cmdb/data:/app/data:ro,Z
+      - ../../services/cmdb/data:/app/data:Z
+      - ../../data/platform:/app/runtime:Z
     profiles:
       - analysis
     networks:

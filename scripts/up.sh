@@ -9,7 +9,7 @@ source "${ROOT_DIR}/scripts/lib/runtime.sh"
 
 "${ROOT_DIR}/scripts/preflight-check.sh"
 
-mkdir -p "${ROOT_DIR}/data/prometheus" "${ROOT_DIR}/data/alertmanager" "${ROOT_DIR}/data/grafana" "${ROOT_DIR}/data/loki" "${ROOT_DIR}/data/promtail" "${ROOT_DIR}/data/tempo" "${ROOT_DIR}/data/neo4j/data" "${ROOT_DIR}/data/neo4j/logs"
+mkdir -p "${ROOT_DIR}/data/prometheus" "${ROOT_DIR}/data/alertmanager" "${ROOT_DIR}/data/grafana" "${ROOT_DIR}/data/loki" "${ROOT_DIR}/data/promtail" "${ROOT_DIR}/data/tempo" "${ROOT_DIR}/data/platform" "${ROOT_DIR}/data/neo4j/data" "${ROOT_DIR}/data/neo4j/logs"
 chmod -R a+rwX \
   "${ROOT_DIR}/data/prometheus" \
   "${ROOT_DIR}/data/alertmanager" \
@@ -17,6 +17,7 @@ chmod -R a+rwX \
   "${ROOT_DIR}/data/loki" \
   "${ROOT_DIR}/data/promtail" \
   "${ROOT_DIR}/data/tempo" \
+  "${ROOT_DIR}/data/platform" \
   "${ROOT_DIR}/data/neo4j/data" \
   "${ROOT_DIR}/data/neo4j/logs"
 

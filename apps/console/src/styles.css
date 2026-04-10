@@ -1,0 +1,327 @@
+:root {
+  font-family: "Microsoft YaHei UI", "Segoe UI Variable", "PingFang SC", sans-serif;
+  color: #eaf2f2;
+  background:
+    radial-gradient(circle at top left, rgba(0, 168, 150, 0.28), transparent 28%),
+    radial-gradient(circle at top right, rgba(255, 141, 65, 0.18), transparent 24%),
+    linear-gradient(180deg, #08171e 0%, #0d2525 54%, #10171f 100%);
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  border: 0;
+  border-radius: 999px;
+  padding: 0.8rem 1.2rem;
+  background: linear-gradient(135deg, #ff8d41, #ffbc66);
+  color: #142126;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+textarea,
+input,
+select {
+  width: 100%;
+  margin-top: 0.45rem;
+  padding: 0.8rem 0.95rem;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(7, 15, 21, 0.76);
+  color: #edf7f5;
+}
+
+#root {
+  width: 100%;
+}
+
+.shell {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 32px 20px 56px;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(260px, 0.8fr);
+  gap: 20px;
+  align-items: stretch;
+  margin-bottom: 24px;
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: #7cd8c2;
+  font-size: 0.82rem;
+}
+
+.hero h1 {
+  margin: 0;
+  font-size: clamp(2.1rem, 5vw, 4.5rem);
+  line-height: 0.95;
+}
+
+.lede {
+  max-width: 760px;
+  color: rgba(234, 242, 242, 0.82);
+  font-size: 1.04rem;
+}
+
+.hero-card,
+.panel,
+.health-card,
+.service-card {
+  background: rgba(5, 12, 17, 0.66);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.24);
+}
+
+.hero-card {
+  border-radius: 28px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.hero-card span,
+.hero-card small {
+  color: rgba(234, 242, 242, 0.72);
+}
+
+.hero-card strong {
+  font-size: 4rem;
+  line-height: 1;
+  margin: 10px 0;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.panel {
+  border-radius: 26px;
+  padding: 22px;
+}
+
+.panel-wide {
+  grid-column: 1 / -1;
+}
+
+.panel-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.panel-heading h2,
+.health-card h3,
+.service-card h3 {
+  margin: 0;
+}
+
+.health-grid,
+.service-grid,
+.event-summary-grid,
+.job-template-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 14px;
+}
+
+.health-card,
+.service-card {
+  border-radius: 22px;
+  padding: 16px;
+}
+
+.health-card-top,
+.service-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.health-card.healthy span {
+  color: #7ce3b4;
+}
+
+.health-card.degraded span,
+.error {
+  color: #ff8f84;
+}
+
+.health-card p,
+.service-card p,
+.muted {
+  color: rgba(234, 242, 242, 0.72);
+}
+
+.health-card pre {
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: #bcece4;
+}
+
+.form-stack {
+  display: grid;
+  gap: 14px;
+}
+
+.form-inline {
+  display: grid;
+  grid-template-columns: 1.1fr 0.6fr 1.6fr auto;
+  gap: 12px;
+  margin: 18px 0;
+}
+
+.cmdb-form {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin: 18px 0;
+}
+
+.result-box {
+  margin-top: 16px;
+  padding: 16px;
+  border-radius: 18px;
+  background: rgba(17, 34, 41, 0.82);
+}
+
+.search {
+  max-width: 280px;
+}
+
+.summary-card,
+.event-row,
+.job-template-card,
+.job-row {
+  border-radius: 18px;
+  padding: 16px;
+  background: rgba(17, 34, 41, 0.82);
+}
+
+.summary-card strong {
+  display: block;
+  font-size: 2rem;
+}
+
+.summary-card span {
+  color: rgba(234, 242, 242, 0.72);
+}
+
+.event-table {
+  display: grid;
+  gap: 12px;
+}
+
+.job-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.audit-list {
+  display: grid;
+  gap: 12px;
+}
+
+.event-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: center;
+}
+
+.event-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.service-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.job-row {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 14px;
+  align-items: start;
+}
+
+.audit-row {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 14px;
+  align-items: start;
+  border-radius: 18px;
+  padding: 16px;
+  background: rgba(17, 34, 41, 0.82);
+}
+
+.job-logs {
+  color: rgba(234, 242, 242, 0.72);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.audit-detail {
+  color: rgba(234, 242, 242, 0.72);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.event-actions button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+ul {
+  margin: 10px 0 0;
+  padding-left: 18px;
+}
+
+@media (max-width: 960px) {
+  .hero,
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .form-inline,
+  .event-row,
+  .cmdb-form,
+  .job-row,
+  .audit-row {
+    grid-template-columns: 1fr;
+  }
+}

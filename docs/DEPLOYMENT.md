@@ -47,6 +47,8 @@
 
 执行 scripts/install-systemd-service.sh 可将平台注册为 systemd 服务，并启用开机自启动。
 
+该脚本还会安装 `slz-platform-backup.timer`，默认每天 `02:30` 自动执行一次平台数据库备份。备份文件位于 `data/backups/`，保留天数可通过 `.env` 中的 `PLATFORM_BACKUP_RETENTION_DAYS` 调整。
+
 ## 6. 发行包制作
 
 执行 scripts/package-release.sh 可在 releases 目录下生成 tar.gz 发行包，适合离线交付或版本归档。
@@ -61,3 +63,4 @@
 - Prometheus、Loki、Grafana 数据目录挂载到独立磁盘。
 - 增加对象存储或远端时序存储，避免单机持久化瓶颈。
 - 将 AI Engine 接入企业微信、钉钉或工单系统 webhook。
+- 定期执行平台数据库恢复演练，确保 `data/backups/` 中的备份文件可用。

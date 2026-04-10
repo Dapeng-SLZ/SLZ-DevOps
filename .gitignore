@@ -10,6 +10,10 @@ __pycache__/
 .env
 releases/
 data/
+!data/backups/
+data/backups/*.db
+apps/console/node_modules/
+apps/console/dist/
 deploy/grafana/data/
 deploy/loki/data/
 deploy/prometheus/data/

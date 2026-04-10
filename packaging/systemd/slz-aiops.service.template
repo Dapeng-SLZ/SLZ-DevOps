@@ -5,9 +5,9 @@ Wants=network-online.target
 
 [Service]
 Type=oneshot
-WorkingDirectory=/opt/slz-devops/current
-ExecStart=/opt/slz-devops/current/scripts/up.sh
-ExecStop=/opt/slz-devops/current/scripts/down.sh
+WorkingDirectory=__ROOT_DIR__
+ExecStart=__ROOT_DIR__/scripts/up.sh
+ExecStop=__ROOT_DIR__/scripts/down.sh
 RemainAfterExit=yes
 TimeoutStartSec=600
 TimeoutStopSec=180

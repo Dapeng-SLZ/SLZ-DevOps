@@ -2,6 +2,8 @@
 
 面向 openEuler 24.03 LTS SP3 的 AIOps 智能运维平台发行项目。当前仓库提供一套可落地的最小发行版骨架，目标是把“方案设计”推进到“可安装、可启动、可二次开发”的交付形态。
 
+当前版本：`0.2.0`
+
 ## 项目目标
 
 - 基于 openEuler 24.03 LTS SP3 构建统一运维平台。
@@ -24,6 +26,7 @@ SLZ-DevOps/
 │   └── promtail/              # Promtail 配置
 ├── docs/                      # 部署与交付文档
 ├── scripts/                   # openEuler 安装、启动、校验脚本
+├── apps/console/              # 独立前端控制台骨架
 └── services/ai-engine/        # 最小可运行智能分析服务
 ```
 
@@ -129,11 +132,68 @@ sudo ./scripts/install-systemd-service.sh
 
 ## 默认访问地址
 
+- 自建控制台：http://<host>:14000 （启用 `console` profile 后）
 - Grafana：http://<host>:13000
 - Prometheus：http://<host>:19090
 - Alertmanager：http://<host>:19093
 - AI Engine：http://<host>:18080/healthz
 - Blackbox Exporter：http://<host>:19115
+
+## 自建前端控制台
+
+当前仓库已经新增独立前端控制台 [docs/SELF_HOSTED_CONSOLE.md](docs/SELF_HOSTED_CONSOLE.md)，可作为平台管理界面与业务控制面的起点。
+
+后续功能填充与产品化路线见 [docs/PRODUCT_ROADMAP.md](docs/PRODUCT_ROADMAP.md)。
+
+正式发布验收清单见 [docs/RELEASE_ACCEPTANCE.md](docs/RELEASE_ACCEPTANCE.md)。
+
+启用方式：
+
+```bash
+cp .env.example .env
+vi .env
+```
+
+在 `.env` 中设置：
+
+```env
+AIOPS_COMPOSE_PROFILES=analysis,console
+CONSOLE_PORT=14000
+```
+
+然后启动：
+
+```bash
+./scripts/up.sh
+```
+
+控制台提供：
+
+- 平台健康总览
+- 事件中心基础视图与事件确认/关闭
+- 作业中心受控模板执行与日志回显
+- AI 异常检测入口
+- 根因分析入口
+- CMDB 服务清单、筛选与基础维护视图
+
+这使得前端看板和管理界面已经可以单独开发，并随当前仓库一起打包成自建平台。
+
+当前事件中心、CMDB 和作业中心已经切换到共享 SQLite 平台业务库持久化，默认数据库文件位于 `data/platform/platform.db`。
+
+可使用以下脚本进行备份与恢复：
+
+```bash
+./scripts/backup-platform-db.sh
+./scripts/restore-platform-db.sh data/backups/platform-YYYYMMDD-HHMMSS.db
+```
+
+如需启用 systemd 自动备份，可执行：
+
+```bash
+sudo ./scripts/install-systemd-service.sh
+```
+
+该脚本会同时安装平台启动服务和每日 `02:30` 的数据库备份定时器。
 
 ## 智能分析服务能力
 
