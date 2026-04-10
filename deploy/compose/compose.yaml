@@ -194,6 +194,15 @@ services:
     build:
       context: ../../apps/console
     container_name: slz-console
+    environment:
+      CONSOLE_AI_ENGINE_UPSTREAM: http://host.containers.internal:${AI_ENGINE_PORT:-18080}
+      CONSOLE_CMDB_UPSTREAM: http://host.containers.internal:${CMDB_PORT:-18081}
+      CONSOLE_JOB_RUNNER_UPSTREAM: http://host.containers.internal:${JOB_RUNNER_PORT:-18084}
+      CONSOLE_PROMETHEUS_UPSTREAM: http://host.containers.internal:${PROMETHEUS_PORT:-19090}
+      CONSOLE_ALERTMANAGER_UPSTREAM: http://host.containers.internal:${ALERTMANAGER_PORT:-19093}
+      CONSOLE_LOKI_UPSTREAM: http://host.containers.internal:${LOKI_PORT:-13100}
+    extra_hosts:
+      - host.containers.internal:host-gateway
     ports:
       - "${CONSOLE_PORT:-14000}:80"
     profiles:
