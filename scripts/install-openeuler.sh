@@ -7,7 +7,7 @@ if [[ "$(id -u)" -ne 0 ]]; then
 fi
 
 dnf makecache
-dnf install -y git curl wget tar podman python3 python3-pip firewalld rsync
+dnf install -y git curl wget tar podman python3 python3-pip firewalld rsync socat
 
 if ! rpm -q netavark >/dev/null 2>&1; then
   dnf install -y netavark

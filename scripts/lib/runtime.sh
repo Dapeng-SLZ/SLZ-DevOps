@@ -100,3 +100,46 @@ run_compose() {
       ;;
   esac
 }
+
+is_podman_runtime() {
+  local runtime="${1:-}"
+  [[ "${runtime}" == "podman" || "${runtime}" == "podman-compose" ]]
+}
+
+generate_podman_compose_file() {
+  local source_file="${1:?source compose file is required}"
+  local output_file="${2:?output compose file is required}"
+
+  mkdir -p "$(dirname "${output_file}")"
+
+  awk '
+    function indent(line, m) {
+      if (match(line, /[^ ]/)) {
+        return RSTART - 1
+      }
+      return length(line)
+    }
+
+    {
+      current_indent = indent($0)
+
+      if (skip_ports) {
+        if ($0 ~ /^[[:space:]]*$/) {
+          next
+        }
+        if (current_indent > ports_indent) {
+          next
+        }
+        skip_ports = 0
+      }
+
+      if ($0 ~ /^[[:space:]]+ports:[[:space:]]*$/) {
+        skip_ports = 1
+        ports_indent = current_indent
+        next
+      }
+
+      print $0
+    }
+  ' "${source_file}" > "${output_file}"
+}

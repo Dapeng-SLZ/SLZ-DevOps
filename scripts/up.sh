@@ -4,6 +4,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 ENV_FILE="${ROOT_DIR}/.env"
 COMPOSE_FILE="${ROOT_DIR}/deploy/compose/compose.yaml"
+PODMAN_COMPOSE_FILE="${ROOT_DIR}/data/runtime/compose.podman.yaml"
 source "${ROOT_DIR}/scripts/lib/runtime.sh"
 
 "${ROOT_DIR}/scripts/preflight-check.sh"
@@ -32,9 +33,13 @@ fi
 
 if [[ "${runtime}" == "podman" || "${runtime}" == "podman-compose" ]]; then
   "${ROOT_DIR}/scripts/build-python-images.sh"
+  generate_podman_compose_file "${COMPOSE_FILE}" "${PODMAN_COMPOSE_FILE}"
+  compose_file_to_use="${PODMAN_COMPOSE_FILE}"
+else
+  compose_file_to_use="${COMPOSE_FILE}"
 fi
 
-compose_args=(--env-file "${ENV_FILE}" -f "${COMPOSE_FILE}")
+compose_args=(--env-file "${ENV_FILE}" -f "${compose_file_to_use}")
 
 if [[ -n "${AIOPS_COMPOSE_PROFILES:-}" ]]; then
   IFS=',' read -r -a profiles <<< "${AIOPS_COMPOSE_PROFILES}"
@@ -50,6 +55,7 @@ if [[ "${runtime}" == "docker" || "${runtime}" == "docker-compose" ]]; then
   run_compose "${runtime}" "${compose_args[@]}" up -d --build
 else
   run_compose "${runtime}" "${compose_args[@]}" up -d
+  "${ROOT_DIR}/scripts/start-default-port-proxies.sh"
 fi
 
 echo "平台已启动，建议执行 ./scripts/post-deploy-check.sh 进行连通性验证。"

@@ -78,6 +78,8 @@ sudo ./scripts/fix-podman-network.sh
 
 该脚本会把 Podman 网络后端从 `cni` 切换为 `netavark`，用于修复 openEuler 上宿主机端口映射异常的问题。
 
+在 openEuler + Podman 默认部署场景下，`./scripts/up.sh` 会自动为默认端口 `13000/19090/19093/18080/...` 建立宿主机代理，因此保持 GitHub 源码默认端口不变即可访问，无需手工改端口。
+
 ### 3. 初始化环境文件
 
 ```bash
