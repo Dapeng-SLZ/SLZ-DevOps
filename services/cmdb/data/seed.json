@@ -1,0 +1,44 @@
+{
+  "services": [
+    {
+      "id": "svc-gateway",
+      "name": "gateway",
+      "tier": "edge",
+      "owner": "platform",
+      "criticality": "high",
+      "dependencies": ["svc-order", "svc-user"]
+    },
+    {
+      "id": "svc-order",
+      "name": "order-service",
+      "tier": "app",
+      "owner": "order-team",
+      "criticality": "high",
+      "dependencies": ["svc-mysql"]
+    },
+    {
+      "id": "svc-user",
+      "name": "user-service",
+      "tier": "app",
+      "owner": "user-team",
+      "criticality": "medium",
+      "dependencies": ["svc-redis"]
+    },
+    {
+      "id": "svc-mysql",
+      "name": "mysql-primary",
+      "tier": "data",
+      "owner": "dba",
+      "criticality": "high",
+      "dependencies": []
+    },
+    {
+      "id": "svc-redis",
+      "name": "redis-cache",
+      "tier": "cache",
+      "owner": "platform",
+      "criticality": "medium",
+      "dependencies": []
+    }
+  ]
+}

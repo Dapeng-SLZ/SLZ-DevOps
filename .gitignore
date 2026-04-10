@@ -10,6 +10,8 @@ __pycache__/
 .env
 releases/
 data/
+!services/cmdb/data/
+!services/cmdb/data/seed.json
 !data/backups/
 data/backups/*.db
 apps/console/node_modules/
