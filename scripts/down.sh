@@ -4,7 +4,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 ENV_FILE="${ROOT_DIR}/.env"
 COMPOSE_FILE="${ROOT_DIR}/deploy/compose/compose.yaml"
-PODMAN_COMPOSE_FILE="${ROOT_DIR}/data/runtime/compose.podman.yaml"
+PODMAN_COMPOSE_FILE="${ROOT_DIR}/deploy/compose/compose.podman.yaml"
 source "${ROOT_DIR}/scripts/lib/runtime.sh"
 
 load_env_file "${ENV_FILE}"
