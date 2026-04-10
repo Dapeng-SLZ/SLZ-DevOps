@@ -7,6 +7,8 @@ SLZ-DevOps 当前已经具备监控、日志、告警、AI 分析和 CMDB 基础
 本仓库已经新增独立前端目录 apps/console，作为自建控制台的起点。该控制台具备以下特征：
 
 - 与 Grafana 分离，面向平台运营与管理场景
+- 通过 Auth Center 提供登录与会话管理
+- 通过 API Gateway 提供导航、工作台摘要和后续 BFF 聚合入口
 - 通过 HTTP API 对接 AI Engine、CMDB、Prometheus、Alertmanager、Loki
 - 可单独本地开发，也可容器化部署
 - 可随当前仓库一起打包成离线发行版
@@ -15,6 +17,8 @@ SLZ-DevOps 当前已经具备监控、日志、告警、AI 分析和 CMDB 基础
 
 当前控制台已经内置四类基础页面能力：
 
+- 登录页与会话恢复
+- 平台工作台首页
 - 平台健康总览
 - 事件中心基础视图
 - 作业中心受控执行视图
@@ -23,6 +27,28 @@ SLZ-DevOps 当前已经具备监控、日志、告警、AI 分析和 CMDB 基础
 - CMDB 服务清单、筛选与编辑视图
 
 这部分不是替代 Grafana，而是补出“平台控制面”和“管理面”的第一层骨架。
+
+## 参考界面方向
+
+后续控制台界面建议参考“企业运维工作台”形态，而不是单纯的图表汇总页。
+
+推荐采用以下界面布局：
+
+- 左侧固定导航：按 CMDB、主机中心、多云管理、工单系统、容器管理、中间件、可观测性、事件墙分组。
+- 中央工作区：展示当前业务域的列表、详情、拓扑、任务、报表和操作面板。
+- 顶部状态区：放置环境切换、全局搜索、通知、用户信息、值班信息。
+- 右下角智能助手：承载问答、任务生成、诊断建议、执行确认。
+
+推荐优先补齐的页面如下：
+
+- 登录页与工作台首页
+- 主机中心与任务中心
+- 可观测性总览、日志中心、告警中心、链路追踪
+- 事件墙与事件详情页
+- 工单系统与变更审批页
+- 中间件巡检页
+
+这一路线与当前仓库已有能力是兼容的，控制台负责承载平台工作流，Grafana 继续负责专业看板展示。
 
 ## 本地开发
 
@@ -53,6 +79,18 @@ AIOPS_COMPOSE_PROFILES=analysis,console
 
 - 控制台：http://<host>:14000
 
+默认登录信息：
+
+- 用户名：admin
+- 密码：Admin@123456
+
+如需在首次启动时覆盖默认凭据，可在 `.env` 中设置：
+
+```env
+AUTH_CENTER_BOOTSTRAP_ADMIN_USERNAME=admin
+AUTH_CENTER_BOOTSTRAP_ADMIN_PASSWORD=Admin@123456
+```
+
 ## 后续演进建议
 
 下一阶段建议把前端继续拆成以下几个业务域：
@@ -67,6 +105,7 @@ AIOPS_COMPOSE_PROFILES=analysis,console
 
 - apps/console: 前端控制台
 - services/api-gateway: BFF 或统一 API 网关
+- services/auth-center: 登录、角色、会话与权限基础服务
 - services/ai-engine: 智能分析服务
 - services/cmdb: 资产与拓扑服务
 - services/job-runner: 自动化作业与执行服务

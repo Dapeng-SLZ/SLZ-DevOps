@@ -133,6 +133,8 @@ sudo ./scripts/install-systemd-service.sh
 ## 默认访问地址
 
 - 自建控制台：http://<host>:14000 （启用 `console` profile 后）
+- Auth Center：http://<host>:18085/healthz （启用 `console` profile 后）
+- API Gateway：http://<host>:18086/healthz （启用 `console` profile 后）
 - Grafana：http://<host>:13000
 - Prometheus：http://<host>:19090
 - Alertmanager：http://<host>:19093
@@ -171,6 +173,9 @@ CONSOLE_PORT=14000
 
 控制台提供：
 
+- 登录页与会话恢复能力
+- Auth Center 登录态管理
+- API Gateway 工作台摘要与导航聚合
 - 平台健康总览
 - 事件中心基础视图与事件确认/关闭
 - 作业中心受控模板执行与日志回显
@@ -179,6 +184,8 @@ CONSOLE_PORT=14000
 - CMDB 服务清单、筛选与基础维护视图
 
 这使得前端看板和管理界面已经可以单独开发，并随当前仓库一起打包成自建平台。
+
+当前默认登录账号为 `admin`，默认密码为 `Admin@123456`，可通过 `.env` 中的 `AUTH_CENTER_BOOTSTRAP_ADMIN_USERNAME` 和 `AUTH_CENTER_BOOTSTRAP_ADMIN_PASSWORD` 初始化覆盖。
 
 当前事件中心、CMDB 和作业中心已经切换到共享 SQLite 平台业务库持久化，默认数据库文件位于 `data/platform/platform.db`。
 

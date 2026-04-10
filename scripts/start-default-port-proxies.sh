@@ -81,6 +81,8 @@ start_proxy loki slz-loki "${LOKI_PORT:-13100}" 3100
 start_proxy blackbox slz-blackbox "${BLACKBOX_PORT:-19115}" 9115
 
 if has_profile console; then
+  start_proxy auth-center slz-auth-center "${AUTH_CENTER_PORT:-18085}" 8085
+  start_proxy api-gateway slz-api-gateway "${API_GATEWAY_PORT:-18086}" 8086
   start_proxy console slz-console "${CONSOLE_PORT:-14000}" 80
   start_proxy job-runner slz-job-runner "${JOB_RUNNER_PORT:-18084}" 8084
 fi

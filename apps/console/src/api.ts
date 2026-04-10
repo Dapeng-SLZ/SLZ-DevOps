@@ -6,9 +6,12 @@ import type {
   JobRecord,
   JobTemplate,
   RootCauseResult,
+  NavigationGroup,
   ServiceHealth,
   ServiceRecord,
   TopologyPayload,
+  UserProfile,
+  WorkspaceSummary,
 } from './types';
 
 const healthEndpoints = [
@@ -22,6 +25,7 @@ const healthEndpoints = [
 async function fetchJson<T>(url: string, init?: RequestInit): Promise<T> {
   const response = await fetch(url, {
     ...init,
+    credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
       ...(init?.headers ?? {}),
@@ -168,4 +172,29 @@ export function resolveEvent(eventId: string, operator: string): Promise<{ updat
 
 export function fetchAuditLogs(limit = 50): Promise<AuditListPayload> {
   return fetchJson<AuditListPayload>(`/api/engine/api/v1/audit?limit=${limit}`);
+}
+
+export function login(username: string, password: string): Promise<{ authenticated: boolean; user: UserProfile }> {
+  return fetchJson<{ authenticated: boolean; user: UserProfile }>('/api/auth/api/v1/login', {
+    method: 'POST',
+    body: JSON.stringify({ username, password }),
+  });
+}
+
+export function logout(): Promise<{ logged_out: boolean }> {
+  return fetchJson<{ logged_out: boolean }>('/api/auth/api/v1/logout', {
+    method: 'POST',
+  });
+}
+
+export function fetchCurrentUser(): Promise<{ user: UserProfile }> {
+  return fetchJson<{ user: UserProfile }>('/api/gateway/api/v1/me');
+}
+
+export function fetchNavigation(): Promise<{ groups: NavigationGroup[] }> {
+  return fetchJson<{ groups: NavigationGroup[] }>('/api/gateway/api/v1/navigation');
+}
+
+export function fetchWorkspaceSummary(): Promise<WorkspaceSummary> {
+  return fetchJson<WorkspaceSummary>('/api/gateway/api/v1/workspace-summary');
 }

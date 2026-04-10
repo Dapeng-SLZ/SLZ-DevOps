@@ -16,6 +16,9 @@ data/
 data/backups/*.db
 apps/console/node_modules/
 apps/console/dist/
+apps/console/*.tsbuildinfo
+apps/console/vite.config.js
+apps/console/vite.config.d.ts
 deploy/grafana/data/
 deploy/loki/data/
 deploy/prometheus/data/

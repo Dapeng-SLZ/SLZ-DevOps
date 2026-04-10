@@ -52,6 +52,8 @@ build_generic_image() {
 build_image "ai-engine" "${ROOT_DIR}/services/ai-engine"
 
 if has_profile console; then
+  build_image "auth-center" "${ROOT_DIR}/services/auth-center"
+  build_image "api-gateway" "${ROOT_DIR}/services/api-gateway"
   build_generic_image "console" "${ROOT_DIR}/apps/console"
   build_image "job-runner" "${ROOT_DIR}/services/job-runner"
 fi

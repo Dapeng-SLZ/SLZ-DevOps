@@ -190,11 +190,63 @@ services:
       - aiops-net
     restart: unless-stopped
 
+  auth-center:
+    build:
+      context: ../../services/auth-center
+      network: host
+      args:
+        PIP_INDEX_URL: ${PIP_INDEX_URL:-https://pypi.tuna.tsinghua.edu.cn/simple}
+        PIP_TRUSTED_HOST: ${PIP_TRUSTED_HOST:-pypi.tuna.tsinghua.edu.cn}
+    container_name: slz-auth-center
+    environment:
+      AUTH_CENTER_APP_NAME: SLZ Auth Center
+      AUTH_CENTER_BOOTSTRAP_ADMIN_USERNAME: ${AUTH_CENTER_BOOTSTRAP_ADMIN_USERNAME:-admin}
+      AUTH_CENTER_BOOTSTRAP_ADMIN_PASSWORD: ${AUTH_CENTER_BOOTSTRAP_ADMIN_PASSWORD:-Admin@123456}
+    ports:
+      - "${AUTH_CENTER_PORT:-18085}:8085"
+    volumes:
+      - ../../data/platform:/app/runtime:Z
+    profiles:
+      - console
+    networks:
+      - aiops-net
+    restart: unless-stopped
+
+  api-gateway:
+    build:
+      context: ../../services/api-gateway
+      network: host
+      args:
+        PIP_INDEX_URL: ${PIP_INDEX_URL:-https://pypi.tuna.tsinghua.edu.cn/simple}
+        PIP_TRUSTED_HOST: ${PIP_TRUSTED_HOST:-pypi.tuna.tsinghua.edu.cn}
+    container_name: slz-api-gateway
+    environment:
+      API_GATEWAY_APP_NAME: SLZ API Gateway
+      API_GATEWAY_AI_ENGINE_URL: http://host.containers.internal:${AI_ENGINE_PORT:-18080}
+      API_GATEWAY_CMDB_URL: http://host.containers.internal:${CMDB_PORT:-18081}
+      API_GATEWAY_JOB_RUNNER_URL: http://host.containers.internal:${JOB_RUNNER_PORT:-18084}
+      API_GATEWAY_PROMETHEUS_URL: http://host.containers.internal:${PROMETHEUS_PORT:-19090}
+      API_GATEWAY_ALERTMANAGER_URL: http://host.containers.internal:${ALERTMANAGER_PORT:-19093}
+      API_GATEWAY_LOKI_URL: http://host.containers.internal:${LOKI_PORT:-13100}
+    extra_hosts:
+      - host.containers.internal:host-gateway
+    ports:
+      - "${API_GATEWAY_PORT:-18086}:8086"
+    volumes:
+      - ../../data/platform:/app/runtime:Z
+    profiles:
+      - console
+    networks:
+      - aiops-net
+    restart: unless-stopped
+
   console:
     build:
       context: ../../apps/console
     container_name: slz-console
     environment:
+      CONSOLE_AUTH_CENTER_UPSTREAM: http://host.containers.internal:${AUTH_CENTER_PORT:-18085}
+      CONSOLE_API_GATEWAY_UPSTREAM: http://host.containers.internal:${API_GATEWAY_PORT:-18086}
       CONSOLE_AI_ENGINE_UPSTREAM: http://host.containers.internal:${AI_ENGINE_PORT:-18080}
       CONSOLE_CMDB_UPSTREAM: http://host.containers.internal:${CMDB_PORT:-18081}
       CONSOLE_JOB_RUNNER_UPSTREAM: http://host.containers.internal:${JOB_RUNNER_PORT:-18084}

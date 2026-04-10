@@ -46,6 +46,13 @@ if has_profile analysis; then
   check_http "AI Root Cause Topology" "http://127.0.0.1:${AI_ENGINE_PORT:-18080}/api/v1/root-cause/topology"
 fi
 
+if has_profile console; then
+  check_http "Console" "http://127.0.0.1:${CONSOLE_PORT:-14000}/"
+  check_http "Job Runner" "http://127.0.0.1:${JOB_RUNNER_PORT:-18084}/healthz"
+  check_http "Auth Center" "http://127.0.0.1:${AUTH_CENTER_PORT:-18085}/healthz"
+  check_http "API Gateway" "http://127.0.0.1:${API_GATEWAY_PORT:-18086}/healthz"
+fi
+
 if has_profile demo; then
   check_http "Demo Gateway" "http://127.0.0.1:${DEMO_GATEWAY_PORT:-18082}/healthz"
   check_http "Demo Order" "http://127.0.0.1:${DEMO_ORDER_PORT:-18083}/healthz"

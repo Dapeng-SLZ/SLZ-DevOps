@@ -104,3 +104,44 @@ export type AuditListPayload = {
   total: number;
   items: AuditRecord[];
 };
+
+export type UserProfile = {
+  username: string;
+  display_name: string;
+  role: string;
+  permissions: string[];
+};
+
+export type NavigationItem = {
+  key: string;
+  label: string;
+  implemented: boolean;
+};
+
+export type NavigationGroup = {
+  title: string;
+  items: NavigationItem[];
+};
+
+export type WorkspaceSummary = {
+  health: Array<{
+    name: string;
+    status: 'healthy' | 'degraded';
+  }>;
+  events: {
+    open?: number;
+    acknowledged?: number;
+    resolved?: number;
+  };
+  job_total: number;
+  cmdb: {
+    service_total: number;
+    edge_total: number;
+  };
+  quick_actions: Array<{
+    key: string;
+    label: string;
+    template_id?: string;
+    filter?: string;
+  }>;
+};

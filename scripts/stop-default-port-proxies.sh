@@ -47,6 +47,8 @@ stop_port_proxy "${LOKI_PORT:-13100}"
 stop_port_proxy "${BLACKBOX_PORT:-19115}"
 
 if has_profile console; then
+  stop_port_proxy "${AUTH_CENTER_PORT:-18085}"
+  stop_port_proxy "${API_GATEWAY_PORT:-18086}"
   stop_port_proxy "${CONSOLE_PORT:-14000}"
   stop_port_proxy "${JOB_RUNNER_PORT:-18084}"
 fi
