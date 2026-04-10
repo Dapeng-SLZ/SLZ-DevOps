@@ -67,6 +67,8 @@ sudo ./scripts/configure-container-mirrors.sh
 podman pull python:3.12-slim
 ```
 
+如果 openEuler + Podman 环境在 Python 服务镜像构建阶段出现 `pip` DNS 解析失败，`./scripts/up.sh` 会先调用 [scripts/build-python-images.sh](scripts/build-python-images.sh) 通过宿主机网络预构建 `ai-engine`、`cmdb`、`demo-*` 镜像，再由 compose 启动容器。
+
 如果容器内部访问正常，但宿主机访问 `13000`、`19090` 等映射端口持续超时，请执行：
 
 ```bash

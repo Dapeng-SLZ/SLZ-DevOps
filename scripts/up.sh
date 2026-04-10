@@ -30,6 +30,10 @@ if ! runtime="$(detect_compose_runtime)"; then
   exit 1
 fi
 
+if [[ "${runtime}" == "podman" || "${runtime}" == "podman-compose" ]]; then
+  "${ROOT_DIR}/scripts/build-python-images.sh"
+fi
+
 compose_args=(--env-file "${ENV_FILE}" -f "${COMPOSE_FILE}")
 
 if [[ -n "${AIOPS_COMPOSE_PROFILES:-}" ]]; then
@@ -42,6 +46,10 @@ if [[ -n "${AIOPS_COMPOSE_PROFILES:-}" ]]; then
   done
 fi
 
-run_compose "${runtime}" "${compose_args[@]}" up -d --build
+if [[ "${runtime}" == "docker" || "${runtime}" == "docker-compose" ]]; then
+  run_compose "${runtime}" "${compose_args[@]}" up -d --build
+else
+  run_compose "${runtime}" "${compose_args[@]}" up -d
+fi
 
 echo "平台已启动，建议执行 ./scripts/post-deploy-check.sh 进行连通性验证。"

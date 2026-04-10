@@ -21,6 +21,8 @@
 
 如果容器内部健康检查正常，但宿主机访问 13000、19090、19093、13100 等映射端口持续超时，可执行 scripts/fix-podman-network.sh。该脚本会将 Podman 网络后端切换为 netavark，并清理旧的 cni 网络状态。
 
+如果 Podman 在 Python 服务镜像构建阶段出现 `pip` 域名解析失败，scripts/up.sh 会自动调用 scripts/build-python-images.sh，通过宿主机网络预构建 Python 服务镜像，再执行 compose 启动。
+
 如需接入中间件监控，请在 .env 中配置 AIOPS_COMPOSE_PROFILES=middleware 或 AIOPS_COMPOSE_PROFILES=middleware,network，并参考 docs/MIDDLEWARE_MONITORING.md 补齐 exporter 参数与 Prometheus 目标文件。
 
 如需启用根因分析底座，请在 .env 中加入 analysis profile，并在组件启动后执行 scripts/sync-cmdb-to-neo4j.sh 将 CMDB 拓扑同步到 Neo4j。
