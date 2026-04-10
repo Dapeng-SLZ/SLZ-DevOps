@@ -22,10 +22,10 @@ has_profile() {
 
 stop_port_proxy() {
   local host_port="$1"
-  pgrep -f "socat TCP-LISTEN:${host_port},bind=0.0.0.0,reuseaddr,fork" | while read -r pid; do
+  while read -r pid; do
     [[ -n "${pid}" ]] || continue
     kill "${pid}" >/dev/null 2>&1 || true
-  done
+  done < <(pgrep -f "socat TCP-LISTEN:${host_port},bind=0.0.0.0,reuseaddr,fork" || true)
 }
 
 [[ -d "${PID_DIR}" ]] || exit 0

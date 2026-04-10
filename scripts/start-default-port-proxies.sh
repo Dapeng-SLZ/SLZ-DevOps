@@ -42,10 +42,10 @@ stop_proxy() {
   fi
 
   if [[ -n "${host_port}" ]]; then
-    pgrep -f "socat TCP-LISTEN:${host_port},bind=0.0.0.0,reuseaddr,fork" | while read -r stale_pid; do
+    while read -r stale_pid; do
       [[ -n "${stale_pid}" ]] || continue
       kill "${stale_pid}" >/dev/null 2>&1 || true
-    done
+    done < <(pgrep -f "socat TCP-LISTEN:${host_port},bind=0.0.0.0,reuseaddr,fork" || true)
   fi
 }
 
