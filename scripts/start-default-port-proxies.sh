@@ -72,6 +72,11 @@ start_proxy ai-engine slz-ai-engine "${AI_ENGINE_PORT:-18080}" 8080
 start_proxy loki slz-loki "${LOKI_PORT:-13100}" 3100
 start_proxy blackbox slz-blackbox "${BLACKBOX_PORT:-19115}" 9115
 
+if has_profile console; then
+  start_proxy console slz-console "${CONSOLE_PORT:-14000}" 80
+  start_proxy job-runner slz-job-runner "${JOB_RUNNER_PORT:-18084}" 8084
+fi
+
 if has_profile analysis; then
   start_proxy cmdb slz-cmdb "${CMDB_PORT:-18081}" 8081
   start_proxy tempo slz-tempo "${TEMPO_PORT:-13200}" 3200
