@@ -19,6 +19,8 @@
 
 如果目标主机无法拉取 docker.io 镜像，可先执行 scripts/configure-container-mirrors.sh，为 Podman 写入镜像源配置，再手工验证 `podman pull python:3.12-slim`。
 
+如果某个单独镜像仍无法从默认镜像源拉取，例如 `neo4j:5.24.0`，可在 `.env` 中覆盖对应镜像地址，例如设置 `NEO4J_IMAGE=<你的私有仓库>/neo4j:5.24.0`，或者在可联网机器上执行 `podman save` 后拷贝到目标主机 `podman load`。
+
 如果容器内部健康检查正常，但宿主机访问 13000、19090、19093、13100 等映射端口持续超时，可执行 scripts/fix-podman-network.sh。该脚本会将 Podman 网络后端切换为 netavark，并清理旧的 cni 网络状态。
 
 如果 Podman 在 Python 服务镜像构建阶段出现 `pip` 域名解析失败，scripts/up.sh 会自动调用 scripts/build-python-images.sh，通过宿主机网络预构建 Python 服务镜像，再执行 compose 启动。
