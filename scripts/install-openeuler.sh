@@ -9,11 +9,11 @@ fi
 dnf makecache
 dnf install -y git curl wget tar podman python3 python3-pip firewalld rsync
 
-if ! command -v netavark >/dev/null 2>&1; then
+if ! rpm -q netavark >/dev/null 2>&1; then
   dnf install -y netavark
 fi
 
-if ! command -v aardvark-dns >/dev/null 2>&1; then
+if ! rpm -q aardvark-dns >/dev/null 2>&1; then
   dnf install -y aardvark-dns || echo "警告: 仓库中未找到 aardvark-dns，继续安装。若后续容器间服务名解析异常，请补充 DNS 组件。"
 fi
 
