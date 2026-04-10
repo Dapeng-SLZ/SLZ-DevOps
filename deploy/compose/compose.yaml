@@ -167,6 +167,10 @@ services:
   ai-engine:
     build:
       context: ../../services/ai-engine
+      network: host
+      args:
+        PIP_INDEX_URL: ${PIP_INDEX_URL:-https://pypi.tuna.tsinghua.edu.cn/simple}
+        PIP_TRUSTED_HOST: ${PIP_TRUSTED_HOST:-pypi.tuna.tsinghua.edu.cn}
     container_name: slz-ai-engine
     environment:
       AIOPS_APP_NAME: SLZ AIOps Engine
@@ -187,6 +191,10 @@ services:
   cmdb:
     build:
       context: ../../services/cmdb
+      network: host
+      args:
+        PIP_INDEX_URL: ${PIP_INDEX_URL:-https://pypi.tuna.tsinghua.edu.cn/simple}
+        PIP_TRUSTED_HOST: ${PIP_TRUSTED_HOST:-pypi.tuna.tsinghua.edu.cn}
     container_name: slz-cmdb
     environment:
       CMDB_APP_NAME: SLZ CMDB Service
@@ -221,6 +229,10 @@ services:
   demo-gateway:
     build:
       context: ../../services/demo-gateway
+      network: host
+      args:
+        PIP_INDEX_URL: ${PIP_INDEX_URL:-https://pypi.tuna.tsinghua.edu.cn/simple}
+        PIP_TRUSTED_HOST: ${PIP_TRUSTED_HOST:-pypi.tuna.tsinghua.edu.cn}
     container_name: slz-demo-gateway
     environment:
       OTEL_SERVICE_NAME: demo-gateway
@@ -239,6 +251,10 @@ services:
   demo-order:
     build:
       context: ../../services/demo-order
+      network: host
+      args:
+        PIP_INDEX_URL: ${PIP_INDEX_URL:-https://pypi.tuna.tsinghua.edu.cn/simple}
+        PIP_TRUSTED_HOST: ${PIP_TRUSTED_HOST:-pypi.tuna.tsinghua.edu.cn}
     container_name: slz-demo-order
     environment:
       OTEL_SERVICE_NAME: demo-order
