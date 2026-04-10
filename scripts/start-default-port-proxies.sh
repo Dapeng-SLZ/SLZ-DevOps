@@ -30,6 +30,7 @@ has_profile() {
 
 stop_proxy() {
   local name="$1"
+  local host_port="${2:-}"
   local pid_file="${PID_DIR}/${name}.pid"
 
   if [[ -f "${pid_file}" ]]; then
@@ -38,6 +39,13 @@ stop_proxy() {
       kill "${pid}" >/dev/null 2>&1 || true
     fi
     rm -f "${pid_file}"
+  fi
+
+  if [[ -n "${host_port}" ]]; then
+    pgrep -f "socat TCP-LISTEN:${host_port},bind=0.0.0.0,reuseaddr,fork" | while read -r stale_pid; do
+      [[ -n "${stale_pid}" ]] || continue
+      kill "${stale_pid}" >/dev/null 2>&1 || true
+    done
   fi
 }
 
@@ -50,7 +58,7 @@ start_proxy() {
   local pid_file="${PID_DIR}/${name}.pid"
   local log_file="${LOG_DIR}/${name}.log"
 
-  stop_proxy "${name}"
+  stop_proxy "${name}" "${host_port}"
 
   container_ip="$(podman inspect "${container_name}" --format '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' 2>/dev/null || true)"
   if [[ -z "${container_ip}" ]]; then
